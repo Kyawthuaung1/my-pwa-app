@@ -4,32 +4,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ဈေးသည် - အရောင်းလက်ထောက်</title>
-
+    
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#f0f0f0">
     <meta name="description" content="ဈေးသည်များအတွက် AI အကူအညီ - ရောင်းအားတိုးတက်စေရန်">
-
+    
     <!-- App Icons -->
     <link rel="icon" href="icon-192x192.png" type="image/png">
     <link rel="apple-touch-icon" href="icon-192x192.png">
-
+    
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-
+    
     <!-- Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+    
     <style>
       body {
         font-family: 'Inter', 'Padauk', sans-serif;
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(180deg, #fff 0%, #f7fafc 100%);
       }
 
-      .bg-waves { position: fixed; inset: 0; z-index: -1; }
-      .wave-container { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; pointer-events: none; }
+      .bg-waves {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+      }
+
+      .wave-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
 
       /* Install Button Styling */
       #installButton {
@@ -42,7 +57,6 @@
         cursor: pointer;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
-        display: none;
       }
 
       #installButton:hover {
@@ -64,15 +78,17 @@
         100% { transform: translateY(0px); }
       }
 
-      .text-slate-900 { color: #0f172a; }
+      .wave-bg {
+        animation: wave-bg 15s ease-in-out infinite;
+      }
     </style>
-
+    
     <script type="importmap">
     {
-      "imports": {}
+      "imports": {
+      }
     }
     </script>
-
     <link rel="stylesheet" href="/index.css">
 </head>
 <body class="text-slate-900">
@@ -80,7 +96,7 @@
     <div class="bg-waves overflow-hidden">
       <div class="wave-container w-[110%] h-[110%]">
         <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" class="absolute top-0 opacity-60">
-          <path fill="#00A651" fill-opacity="0.3" d="M0,192L48,181.3C96,171,192,149,288,144C384,139,480,149,576,170.7C672,192,768,224,864,229.3C960,235,1056,213,1152,181.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+          <path fill="#FECB00" fill-opacity="0.3" d="M0,64L48,74.7C96,85,192,107,288,112C384,117,480,107,576,117.3C672,128,768,160,864,165.3C960,171,1056,149,1152,117.3C1248,85,1344,43,1392,21.3L1440,0L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
         </svg>
 
         <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" class="absolute top-[55%] opacity-60 rotate-180">
@@ -96,13 +112,15 @@
 
     <!-- PWA Install Button Container -->
     <div class="install-container">
-      <button id="installButton">📲 အပလီကေးရှင်း ထည့်သွင်းရန်</button>
+      <button id="installButton" style="display:none;">
+        📲 အပလီကေးရှင်း ထည့်သွင်းရန်
+      </button>
       <div id="status" class="mt-2 text-sm text-gray-600"></div>
     </div>
 
     <!-- Main App -->
     <div id="root"></div>
-
+    
     <!-- PWA Scripts -->
     <script>
       // Service Worker Registration
@@ -111,11 +129,11 @@
           navigator.serviceWorker.register('/service-worker.js')
             .then(function(registration) {
               console.log('Service Worker registered: ', registration);
-              document.getElementById('status').innerHTML = 'Service Worker registered';
+              const statusEl = document.getElementById('status');
+              if (statusEl) statusEl.innerHTML = 'Service Worker ထည့်သွင်းပြီးပါပြီ';
             })
             .catch(function(err) {
               console.error('Service Worker registration failed: ', err);
-              document.getElementById('status').innerHTML = 'Service Worker registration failed';
             });
         });
       }
@@ -127,31 +145,33 @@
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        installButton.style.display = 'inline-block';
-      });
-
-      installButton.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        const choiceResult = await deferredPrompt.userChoice;
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-          installButton.style.display = 'none';
-          document.getElementById('status').innerHTML = '✓ အပလီကေးရှင်းကို ထည့်သွင်းပြီးပါပြီ';
-        } else {
-          console.log('User dismissed the install prompt');
+        if (installButton) {
+          installButton.style.display = 'inline-block';
+          installButton.addEventListener('click', async () => {
+            installButton.style.display = 'none';
+            deferredPrompt.prompt();
+            const choiceResult = await deferredPrompt.userChoice;
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+              document.getElementById('status').innerHTML = '✓ အပလီကေးရှင်းကို ထည့်သွင်းပြီးပါပြီ';
+            } else {
+              console.log('User dismissed the install prompt');
+              document.getElementById('status').innerHTML = 'Install မခံယူခဲ့ပါ';
+            }
+            deferredPrompt = null;
+          }, { once: true });
         }
-        deferredPrompt = null;
       });
 
       // Check if app is already installed
       window.addEventListener('appinstalled', () => {
         console.log('PWA was installed');
-        installButton.style.display = 'none';
-        document.getElementById('status').innerHTML = '✓ အပလီကေးရှင်း ထည့်သွင်းပြီးပါပြီ';
+        if (installButton) installButton.style.display = 'none';
+        const statusEl = document.getElementById('status');
+        if (statusEl) statusEl.innerHTML = '✓ အပလီကေးရှင်း ထည့်သွင်းပြီးပါပြီ';
       });
     </script>
-
+    
     <!-- Main App Script -->
     <script type="module" src="/index.tsx"></script>
 </body>
