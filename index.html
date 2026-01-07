@@ -1,12 +1,25 @@
-
 <!DOCTYPE html>
 <html lang="my">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ဈေးသည် - အရောင်းလက်ထောက်</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#f0f0f0">
+    <meta name="description" content="ဈေးသည်များအတွက် AI အကူအညီ - ရောင်းအားတိုးတက်စေရန်">
+    
+    <!-- App Icons -->
+    <link rel="icon" href="icon-192x192.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <style>
       body {
         font-family: 'Inter', 'Padauk', sans-serif;
@@ -35,7 +48,7 @@
         width: 100%;
         height: 100%;
         z-index: -1;
-        opacity: 0.4; /* Increased from 0.15 for better visibility */
+        opacity: 0.4;
         pointer-events: none;
       }
 
@@ -67,6 +80,31 @@
         transition: all 0.3s ease;
       }
 
+      /* Install Button Styling */
+      #installButton {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      #installButton:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .install-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+
       /* Floating Animation */
       @keyframes float {
         0% { transform: translateY(0px); }
@@ -87,20 +125,21 @@
         animation: wave-bg 15s ease-in-out infinite;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+    
+    <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3",
+        "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="text-slate-900">
-    <!-- Myanmar Flag Themed Waves Background Overlay (More Visible) -->
+<body class="text-slate-900">
+    <!-- Myanmar Flag Themed Waves Background Overlay -->
     <div class="bg-waves overflow-hidden">
       <div class="wave-container w-[110%] h-[110%]">
         <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" class="absolute top-0 opacity-60">
@@ -112,93 +151,83 @@
         <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" class="absolute top-[55%] opacity-60 rotate-180">
           <path fill="#DA291C" fill-opacity="0.3" d="M0,192L48,181.3C96,171,192,149,288,144C384,139,480,149,576,170.7C672,192,768,224,864,229.3C960,235,1056,213,1152,181.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
         </svg>
-        <!-- Star Shadow (More Visible) -->
+        <!-- Star Shadow -->
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] opacity-[0.06]">
           <path fill="#000" d="M50,5 L61,35 L95,35 L68,55 L78,85 L50,65 L22,85 L32,55 L5,35 L39,35 Z"></path>
         </svg>
       </div>
     </div>
-    <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- PWA အတွက် မဖြစ်မနေ meta tags -->
-    <meta name="theme-color" content="#000000">
-    <meta name="description" content="ကိုယ်ပိုင် PWA application">
-    
-    <!-- App icon များ -->
-    <link rel="icon" href="icon-192x192.png" type="image/png">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
-    
-    <!-- PWA manifest -->
-    <link rel="manifest" href="manifest.json">
-    
-    <title>ကိုယ့်အပ္app</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>မင်္ဂလာပါ! 👋</h1>
-        <p>ဒီက ကိုယ်ပိုင် PWA App</p>
-        <p>အောက်က button ကို နှိပ်ပြီး install လုပ်နိုင်ပါတယ်</p>
-        
-        <button id="installButton" style="display:none;">
-            📲 App Install လုပ်ပါ
-        </button>
-        
-        <div id="status"></div>
+    <!-- PWA Install Button Container -->
+    <div class="install-container">
+      <button id="installButton" style="display:none;">
+        📲 အပလီကေးရှင်း ထည့်သွင်းရန်
+      </button>
+      <div id="status" class="mt-2 text-sm text-gray-600"></div>
     </div>
     
+    <!-- Main App -->
+    <div id="root"></div>
+    
+    <!-- PWA Scripts -->
     <script>
-        // Service Worker Register လုပ်ခြင်း
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/my-pwa-app/service-worker.js')
-                    .then(function(registration) {
-                        console.log('Service Worker registered: ', registration);
-                        document.getElementById('status').innerHTML = 
-                            '✓ Service Worker အောင်မြင်စွာ register လုပ်ပြီး';
-                    })
-                    .catch(function(error) {
-                        console.log('Service Worker registration failed: ', error);
-                        document.getElementById('status').innerHTML = 
-                            '✗ Service Worker register လုပ်ရာမှာအမှားတစ်ခုရှိနေပါတယ်';
-                    });
-            });
-        }
-        
-        // Install button ကို ပြသခြင်း
-        let deferredPrompt;
-        const installButton = document.getElementById('installButton');
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent the mini-infobar from appearing on mobile
-            e.preventDefault();
-            // Stash the event so it can be triggered later
-            deferredPrompt = e;
-            // Show the install button
-            installButton.style.display = 'block';
-            
-            installButton.addEventListener('click', () => {
-                // Show the install prompt
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    } else {
-                        console.log('User dismissed the install prompt');
-                    }
-                    deferredPrompt = null;
-                });
+      // Service Worker Registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(function(registration) {
+              console.log('Service Worker registered: ', registration);
+              document.getElementById('status').innerHTML = 
+                '✓ Service Worker အောင်မြင်စွာ register လုပ်ပြီး';
+            })
+            .catch(function(error) {
+              console.log('Service Worker registration failed: ', error);
+              document.getElementById('status').innerHTML = 
+                '✗ Service Worker register လုပ်ရာမှာအမှားတစ်ခုရှိနေပါတယ်';
             });
         });
+      }
+      
+      // Install Button Logic
+      let deferredPrompt;
+      const installButton = document.getElementById('installButton');
+      
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        // Show the install button
+        installButton.style.display = 'block';
+        
+        installButton.addEventListener('click', () => {
+          // Show the install prompt
+          deferredPrompt.prompt();
+          // Wait for the user to respond to the prompt
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+              installButton.style.display = 'none';
+              document.getElementById('status').innerHTML = 
+                '✓ အပလီကေးရှင်းကို ထည့်သွင်းပြီးပါပြီ';
+            } else {
+              console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+          });
+        });
+      });
+      
+      // Check if app is already installed
+      window.addEventListener('appinstalled', () => {
+        console.log('PWA was installed');
+        installButton.style.display = 'none';
+        document.getElementById('status').innerHTML = 
+          '✓ အပလီကေးရှင်း ထည့်သွင်းပြီးပါပြီ';
+      });
     </script>
+    
+    <!-- Main App Script -->
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
